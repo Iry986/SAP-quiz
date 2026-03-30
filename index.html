@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SAP EC Quiz">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>SAP EC Core Quiz</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,12 +14,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .container { max-width: 600px; margin: 0 auto; padding: 20px; }
 .hide { display: none; }
 .show { display: block; }
-
 h1 { text-align: center; font-size: 24px; color: #4fc3f7; margin-bottom: 8px; }
 h2 { text-align: center; font-size: 22px; margin-bottom: 16px; }
-
 .card { background: #132042; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
-
 .btn {
   display: block; width: 100%; padding: 16px; font-size: 18px; font-weight: bold;
   color: #fff; border: none; border-radius: 12px; cursor: pointer;
@@ -27,7 +26,6 @@ h2 { text-align: center; font-size: 22px; margin-bottom: 16px; }
 .btn:active { opacity: 0.8; }
 .btn-purple { background: linear-gradient(135deg, #667eea, #764ba2); }
 .btn-green { background: linear-gradient(135deg, #00e676, #00c853); color: #0a1628; }
-
 .input-field {
   width: 100%; padding: 14px 18px; font-size: 18px;
   border: 2px solid #2a3a5a; border-radius: 12px;
@@ -35,13 +33,10 @@ h2 { text-align: center; font-size: 22px; margin-bottom: 16px; }
   -webkit-appearance: none; margin-bottom: 16px;
 }
 .input-field:focus { border-color: #4fc3f7; }
-
 .progress-bar { background: #1a2a4a; border-radius: 10px; height: 8px; margin: 15px 0; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, #4fc3f7, #00e676); border-radius: 10px; transition: width 0.5s ease; }
-
 .counter { text-align: center; color: #90a4ae; font-size: 14px; margin-bottom: 10px; }
 .score-text { text-align: center; color: #4fc3f7; font-size: 14px; margin-bottom: 15px; }
-
 .opt-btn {
   background: #1a2a4a; border: 2px solid #2a3a5a; border-radius: 12px;
   padding: 16px 20px; font-size: 16px; color: #fff; cursor: pointer;
@@ -61,13 +56,11 @@ h2 { text-align: center; font-size: 22px; margin-bottom: 16px; }
 .opt-btn.wrong .letter { background: #f44336; }
 .opt-btn.dim { pointer-events: none; opacity: 0.5; }
 .opt-btn.dim.correct { opacity: 1; }
-
 .explain {
   background: #1a3a2a; border-left: 4px solid #4caf50; border-radius: 8px;
   padding: 16px; margin-top: 12px; font-size: 14px; line-height: 1.5; color: #a5d6a7;
 }
 .explain.wrong-box { background: #3a1a1a; border-left-color: #f44336; color: #ef9a9a; }
-
 .level-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px 0; }
 .level-btn {
   background: #1a2a4a; border: 2px solid #2a3a5a; border-radius: 12px;
@@ -78,12 +71,10 @@ h2 { text-align: center; font-size: 22px; margin-bottom: 16px; }
 .level-btn.picked { background: linear-gradient(135deg, #667eea, #764ba2); border-color: #667eea; }
 .level-btn.shut { opacity: 0.4; pointer-events: none; }
 .level-btn:active { transform: scale(0.95); }
-
 .stat-row { display: flex; justify-content: center; gap: 16px; margin: 16px 0; }
 .stat-item { background: #132042; border-radius: 12px; padding: 12px 18px; text-align: center; }
 .stat-num { font-size: 22px; font-weight: bold; color: #4fc3f7; }
 .stat-lbl { font-size: 11px; color: #90a4ae; }
-
 .hist-item {
   background: #1a2a4a; border-radius: 8px; padding: 10px 14px;
   margin-bottom: 8px; display: flex; justify-content: space-between;
@@ -93,7 +84,6 @@ h2 { text-align: center; font-size: 22px; margin-bottom: 16px; }
 .h-fail { color: #f44336; font-weight: bold; }
 .h-date { color: #78909c; font-size: 11px; }
 .h-lvl { color: #b39ddb; }
-
 .big-icon { font-size: 72px; text-align: center; margin-bottom: 12px; }
 .big-score { font-size: 48px; font-weight: bold; text-align: center; margin: 12px 0; }
 .pass-color { color: #4caf50; }
@@ -104,6 +94,10 @@ h2 { text-align: center; font-size: 22px; margin-bottom: 16px; }
 .gold { color: #ffd54f; }
 .user-bar { text-align: center; color: #90a4ae; font-size: 13px; margin-bottom: 12px; }
 .user-bar b { color: #4fc3f7; }
+.sync-status { text-align: center; font-size: 11px; color: #546e7a; margin-top: 8px; }
+.sync-ok { color: #4caf50; }
+.sync-fail { color: #f44336; }
+.loading-msg { text-align: center; color: #4fc3f7; font-size: 16px; margin-top: 12px; }
 </style>
 </head>
 <body>
@@ -118,16 +112,17 @@ h2 { text-align: center; font-size: 22px; margin-bottom: 16px; }
   </div>
   <div class="card">
     <h2>Welcome!</h2>
-    <p class="msg">Enter your nickname to start.</p>
+    <p class="msg">Enter your nickname to start.<br>Use the same name on any device to sync progress!</p>
     <input type="text" id="nameInput" class="input-field" placeholder="Your nickname..." maxlength="20">
     <div id="nameErr" class="hide" style="color:#f44336;font-size:14px;margin-bottom:12px;">Enter at least 2 characters</div>
-    <button class="btn" onclick="doLogin()">START</button>
+    <div id="loadingMsg" class="hide loading-msg">Loading your progress...</div>
+    <button class="btn" id="loginBtn" onclick="doLogin()">START</button>
   </div>
 </div>
 
 <!-- LEVELS -->
 <div id="pgLevels" class="hide">
-  <div class="user-bar">Logged in as: <b id="showUser"></b> <button class="logout-btn" onclick="doLogout()" style="background:none;border:1px solid #90a4ae;color:#90a4ae;padding:3px 10px;border-radius:10px;font-size:11px;cursor:pointer;-webkit-appearance:none;">Logout</button></div>
+  <div class="user-bar">Logged in as: <b id="showUser"></b> <button onclick="doLogout()" style="background:none;border:1px solid #90a4ae;color:#90a4ae;padding:3px 10px;border-radius:10px;font-size:11px;cursor:pointer;-webkit-appearance:none;margin-left:6px;">Logout</button></div>
   <h1>SAP EC Core Quiz</h1>
   <div class="stat-row">
     <div class="stat-item"><div class="stat-num" id="sAttempts">0</div><div class="stat-lbl">Attempts</div></div>
@@ -137,6 +132,7 @@ h2 { text-align: center; font-size: 22px; margin-bottom: 16px; }
   <p class="center gold mb8">Select a Level:</p>
   <div class="level-grid" id="lvlGrid"></div>
   <button class="btn" onclick="beginQuiz()">PLAY</button>
+  <div id="syncInfo" class="sync-status"></div>
   <div style="margin-top:20px;">
     <p class="center" style="color:#4fc3f7;font-size:15px;margin-bottom:10px;">Recent Attempts</p>
     <div id="histBox"></div>
@@ -164,13 +160,19 @@ h2 { text-align: center; font-size: 22px; margin-bottom: 16px; }
     <div class="big-score" id="rScore"></div>
     <p class="msg" id="rMsg"></p>
     <button class="btn btn-purple" onclick="goLevels()">Back to Levels</button>
-    <button class="btn" onclick="beginQuiz()">Retry Level</button>
+    <button class="btn" onclick="beginQuiz()" style="margin-top:8px;">Retry Level</button>
   </div>
 </div>
 
 </div>
 
 <script>
+// ===== CLOUD CONFIG =====
+var API_KEY = '$2a$10$Z1ijjFueKCcluP2qAt1qUODHVP1G3xWnVIsc.I6ob2inr9iNfRWwq';
+var API_BASE = 'https://api.jsonbin.io/v3';
+var MASTER_BIN = null; // will be auto-created or loaded
+
+// ===== STATE =====
 var user = null;
 var lvl = 1;
 var maxLvl = 1;
@@ -180,10 +182,11 @@ var qi = 0;
 var sc = 0;
 var done = false;
 
+// ===== QUESTION BANK =====
 var bank = {
 1: [
   {q:"What is Employee Central (EC) in SAP SuccessFactors?", o:["A payroll processing engine","The core HR system and single source of truth for employee data","A recruitment management tool","A learning management system"], a:1, e:"EC is the core HR system, the single source of truth for employee data from hire to termination."},
-  {q:"What does 'effective dating' mean in Employee Central?", o:["Only current data is stored","Every change has a start date; old data is not overwritten","Data is deleted after the effective date","Changes are applied without tracking"], a:1, e:"Every change has a start date. Old data is not overwritten."},
+  {q:"What does effective dating mean in Employee Central?", o:["Only current data is stored","Every change has a start date; old data is not overwritten","Data is deleted after the effective date","Changes are applied without tracking"], a:1, e:"Every change has a start date. Old data is not overwritten."},
   {q:"Which of the following is Personal Data in EC?", o:["Job title and position","Pay grade and compensation","Name, date of birth, and address","Manager assignment"], a:2, e:"Personal data = who the person is (name, date of birth, address)."},
   {q:"Which of the following is Employment Data in EC?", o:["Date of birth","Home address","Job, position, pay, and manager","Emergency contacts"], a:2, e:"Employment data = how and where the person works (job, position, pay, manager)."},
   {q:"What are the three employee identifiers in EC?", o:["Employee Number, SSN, Badge ID","User ID, Person ID External, and Username","Login ID, Payroll ID, Position ID","First Name, Last Name, Email"], a:1, e:"The three identifiers are User ID, Person ID External, and Username."},
@@ -273,7 +276,117 @@ var bank = {
 ]
 };
 
-function save() {
+// ===== CLOUD SYNC FUNCTIONS =====
+
+function getMasterBin() {
+  try {
+    return localStorage.getItem('sq_masterBin') || null;
+  } catch(x) { return null; }
+}
+
+function setMasterBin(id) {
+  try { localStorage.setItem('sq_masterBin', id); } catch(x) {}
+  MASTER_BIN = id;
+}
+
+function createMasterBin(callback) {
+  fetch(API_BASE + '/b', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': API_KEY,
+      'X-Bin-Name': 'sap-quiz-master-v2'
+    },
+    body: JSON.stringify({ users: {} })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    if (d && d.metadata && d.metadata.id) {
+      setMasterBin(d.metadata.id);
+      callback(true);
+    } else {
+      callback(false);
+    }
+  })
+  .catch(function() { callback(false); });
+}
+
+function loadFromCloud(username, callback) {
+  if (!MASTER_BIN) { callback(false); return; }
+
+  fetch(API_BASE + '/b/' + MASTER_BIN + '/latest', {
+    method: 'GET',
+    headers: { 'X-Master-Key': API_KEY }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    if (d && d.record && d.record.users) {
+      var key = username.toLowerCase();
+      var ud = d.record.users[key];
+      if (ud) {
+        maxLvl = ud.maxLvl || 1;
+        hist = ud.hist || [];
+        callback(true);
+      } else {
+        callback(false);
+      }
+    } else {
+      callback(false);
+    }
+  })
+  .catch(function() { callback(false); });
+}
+
+function saveToCloud(username) {
+  if (!MASTER_BIN) return;
+
+  // First load current data to not overwrite other users
+  fetch(API_BASE + '/b/' + MASTER_BIN + '/latest', {
+    method: 'GET',
+    headers: { 'X-Master-Key': API_KEY }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    var allUsers = {};
+    if (d && d.record && d.record.users) {
+      allUsers = d.record.users;
+    }
+    var key = username.toLowerCase();
+    allUsers[key] = {
+      maxLvl: maxLvl,
+      hist: hist.slice(0, 30),
+      lastActive: new Date().toISOString()
+    };
+
+    return fetch(API_BASE + '/b/' + MASTER_BIN, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': API_KEY
+      },
+      body: JSON.stringify({ users: allUsers })
+    });
+  })
+  .then(function(r) {
+    if (r.ok) {
+      showSync('Synced to cloud');
+    }
+  })
+  .catch(function() {
+    showSync('Offline - saved locally');
+  });
+}
+
+function showSync(msg) {
+  var el = document.getElementById('syncInfo');
+  if (el) {
+    el.textContent = msg;
+    el.className = msg.indexOf('Synced') >= 0 ? 'sync-status sync-ok' : 'sync-status sync-fail';
+  }
+}
+
+// ===== LOCAL SAVE/LOAD =====
+function saveLocal() {
   try {
     localStorage.setItem('sq_user', user);
     localStorage.setItem('sq_maxLvl', maxLvl);
@@ -281,13 +394,14 @@ function save() {
   } catch(x) {}
 }
 
-function load() {
+function loadLocal() {
   try {
     maxLvl = parseInt(localStorage.getItem('sq_maxLvl')) || 1;
     hist = JSON.parse(localStorage.getItem('sq_hist') || '[]');
   } catch(x) { maxLvl = 1; hist = []; }
 }
 
+// ===== PAGE NAVIGATION =====
 function showPg(id) {
   var pages = ['pgLogin','pgLevels','pgQuiz','pgResult'];
   for (var i = 0; i < pages.length; i++) {
@@ -296,6 +410,7 @@ function showPg(id) {
   window.scrollTo(0, 0);
 }
 
+// ===== LOGIN =====
 function doLogin() {
   var n = document.getElementById('nameInput').value.trim();
   if (n.length < 2) {
@@ -303,10 +418,56 @@ function doLogin() {
     return;
   }
   document.getElementById('nameErr').className = 'hide';
+  document.getElementById('loadingMsg').className = 'show loading-msg';
+  document.getElementById('loginBtn').style.display = 'none';
+
   user = n;
-  load();
-  save();
+
+  // Load local data first (instant)
+  loadLocal();
+
+  // Check if we have a master bin
+  MASTER_BIN = getMasterBin();
+
+  if (MASTER_BIN) {
+    // Try loading from cloud
+    loadFromCloud(user, function(found) {
+      if (!found) {
+        // User not in cloud yet, use local data
+        loadLocal();
+      }
+      saveLocal();
+      finishLogin();
+    });
+  } else {
+    // No master bin yet - create one
+    createMasterBin(function(ok) {
+      if (ok) {
+        // Try loading (new bin, so user wont exist)
+        loadFromCloud(user, function() {
+          saveLocal();
+          finishLogin();
+        });
+      } else {
+        // Cloud failed, use local only
+        finishLogin();
+      }
+    });
+  }
+
+  // Safety timeout - if cloud takes too long, proceed anyway
+  setTimeout(function() {
+    if (document.getElementById('pgLogin').className !== 'hide') {
+      finishLogin();
+    }
+  }, 5000);
+}
+
+function finishLogin() {
+  document.getElementById('loadingMsg').className = 'hide';
+  document.getElementById('loginBtn').style.display = 'block';
   document.getElementById('showUser').textContent = user;
+  saveLocal();
   drawLevels();
   drawHist();
   drawStats();
@@ -320,6 +481,7 @@ function doLogout() {
   showPg('pgLogin');
 }
 
+// ===== LEVEL DISPLAY =====
 function drawLevels() {
   var g = document.getElementById('lvlGrid');
   g.innerHTML = '';
@@ -364,6 +526,7 @@ function drawHist() {
   box.innerHTML = h;
 }
 
+// ===== QUIZ =====
 function shuffle(a) {
   for (var i = a.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
@@ -432,9 +595,9 @@ function goNext() {
   showQ();
 }
 
+// ===== RESULTS =====
 function showResult() {
   var ok = sc >= 8;
-  document.getElementById('rIcon').textContent = ok ? 'Trophy!' : 'Keep going!';
   document.getElementById('rIcon').textContent = ok ? '\uD83C\uDFC6' : '\uD83D\uDCAA';
   document.getElementById('rTitle').textContent = ok ? 'LEVEL PASSED!' : 'NOT YET...';
   var rs = document.getElementById('rScore');
@@ -449,8 +612,13 @@ function showResult() {
   var now = new Date();
   var ds = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
   hist.unshift({l: lvl, s: sc, d: ds});
-  if (hist.length > 50) hist = hist.slice(0, 50);
-  save();
+  if (hist.length > 30) hist = hist.slice(0, 30);
+
+  // Save locally
+  saveLocal();
+  // Save to cloud
+  saveToCloud(user);
+
   showPg('pgResult');
 }
 
@@ -461,13 +629,18 @@ function goLevels() {
   showPg('pgLevels');
 }
 
-// Auto-login
+// ===== AUTO LOGIN =====
 try {
   var su = localStorage.getItem('sq_user');
   if (su) {
     document.getElementById('nameInput').value = su;
   }
 } catch(x) {}
+
+// Handle Enter key on login
+document.getElementById('nameInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter' || e.keyCode === 13) { doLogin(); }
+});
 </script>
 </body>
 </html>
