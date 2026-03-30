@@ -366,21 +366,28 @@ function login() {
     return;
   }
   document.getElementById('loginError').style.display = 'none';
-  document.getElementById('loginLoading').style.display = 'block';
-  document.getElementById('loginBtn').style.display = 'none';
 
   currentUser = input;
   try { localStorage.setItem('sap_currentUser', currentUser); } catch(e) {}
 
-  loadUserData(currentUser).then(function() {
-    document.getElementById('loginLoading').style.display = 'none';
-    document.getElementById('loginBtn').style.display = 'inline-block';
-    document.getElementById('displayName').textContent = currentUser;
-    renderLevels();
-    renderHistory();
-    renderStats();
-    showScreen('startScreen');
-  });
+  // Load from localStorage only (works on all devices)
+  maxUnlocked = parseInt(localStorage.getItem('sap_maxLevel_' + currentUser.toLowerCase())) || 1;
+  history = JSON.parse(localStorage.getItem('sap_history_' + currentUser.toLowerCase()) || '[]');
+
+  // Try cloud sync in background (non-blocking)
+  try {
+    loadUserData(currentUser).then(function() {
+      renderLevels();
+      renderHistory();
+      renderStats();
+    }).catch(function() {});
+  } catch(e) {}
+
+  document.getElementById('displayName').textContent = currentUser;
+  renderLevels();
+  renderHistory();
+  renderStats();
+  showScreen('startScreen');
 }
 
 function logout() {
