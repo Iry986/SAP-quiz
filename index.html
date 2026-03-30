@@ -2,26 +2,472 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>SAP EC Core Quiz</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a1628; color: #fff; min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.container { max-width: 600px; margin: 0 auto; padding: 20px; }
+.hide { display: none; }
+.show { display: block; }
+
+h1 { text-align: center; font-size: 24px; color: #4fc3f7; margin-bottom: 8px; }
+h2 { text-align: center; font-size: 22px; margin-bottom: 16px; }
+
+.card { background: #132042; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+
+.btn {
+  display: block; width: 100%; padding: 16px; font-size: 18px; font-weight: bold;
+  color: #fff; border: none; border-radius: 12px; cursor: pointer;
+  -webkit-appearance: none; text-align: center; margin-top: 12px;
+  background: linear-gradient(135deg, #4fc3f7, #0288d1);
+}
+.btn:active { opacity: 0.8; }
+.btn-purple { background: linear-gradient(135deg, #667eea, #764ba2); }
+.btn-green { background: linear-gradient(135deg, #00e676, #00c853); color: #0a1628; }
+
+.input-field {
+  width: 100%; padding: 14px 18px; font-size: 18px;
+  border: 2px solid #2a3a5a; border-radius: 12px;
+  background: #1a2a4a; color: #fff; outline: none;
+  -webkit-appearance: none; margin-bottom: 16px;
+}
+.input-field:focus { border-color: #4fc3f7; }
+
+.progress-bar { background: #1a2a4a; border-radius: 10px; height: 8px; margin: 15px 0; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #4fc3f7, #00e676); border-radius: 10px; transition: width 0.5s ease; }
+
+.counter { text-align: center; color: #90a4ae; font-size: 14px; margin-bottom: 10px; }
+.score-text { text-align: center; color: #4fc3f7; font-size: 14px; margin-bottom: 15px; }
+
+.opt-btn {
+  background: #1a2a4a; border: 2px solid #2a3a5a; border-radius: 12px;
+  padding: 16px 20px; font-size: 16px; color: #fff; cursor: pointer;
+  text-align: left; display: flex; align-items: center; gap: 12px;
+  -webkit-appearance: none; width: 100%; margin-bottom: 10px;
+  transition: all 0.2s;
+}
+.opt-btn:active { transform: scale(0.98); }
+.opt-btn .letter {
+  background: #2a3a5a; min-width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: bold; font-size: 14px;
+}
+.opt-btn.correct { background: #1b5e20; border-color: #4caf50; }
+.opt-btn.correct .letter { background: #4caf50; }
+.opt-btn.wrong { background: #b71c1c; border-color: #f44336; }
+.opt-btn.wrong .letter { background: #f44336; }
+.opt-btn.dim { pointer-events: none; opacity: 0.5; }
+.opt-btn.dim.correct { opacity: 1; }
+
+.explain {
+  background: #1a3a2a; border-left: 4px solid #4caf50; border-radius: 8px;
+  padding: 16px; margin-top: 12px; font-size: 14px; line-height: 1.5; color: #a5d6a7;
+}
+.explain.wrong-box { background: #3a1a1a; border-left-color: #f44336; color: #ef9a9a; }
+
+.level-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px 0; }
+.level-btn {
+  background: #1a2a4a; border: 2px solid #2a3a5a; border-radius: 12px;
+  padding: 12px 16px; font-size: 14px; color: #fff; cursor: pointer;
+  min-width: 90px; text-align: center; -webkit-appearance: none;
+}
+.level-btn.open { border-color: #4fc3f7; }
+.level-btn.picked { background: linear-gradient(135deg, #667eea, #764ba2); border-color: #667eea; }
+.level-btn.shut { opacity: 0.4; pointer-events: none; }
+.level-btn:active { transform: scale(0.95); }
+
+.stat-row { display: flex; justify-content: center; gap: 16px; margin: 16px 0; }
+.stat-item { background: #132042; border-radius: 12px; padding: 12px 18px; text-align: center; }
+.stat-num { font-size: 22px; font-weight: bold; color: #4fc3f7; }
+.stat-lbl { font-size: 11px; color: #90a4ae; }
+
+.hist-item {
+  background: #1a2a4a; border-radius: 8px; padding: 10px 14px;
+  margin-bottom: 8px; display: flex; justify-content: space-between;
+  align-items: center; font-size: 13px;
+}
+.h-pass { color: #4caf50; font-weight: bold; }
+.h-fail { color: #f44336; font-weight: bold; }
+.h-date { color: #78909c; font-size: 11px; }
+.h-lvl { color: #b39ddb; }
+
+.big-icon { font-size: 72px; text-align: center; margin-bottom: 12px; }
+.big-score { font-size: 48px; font-weight: bold; text-align: center; margin: 12px 0; }
+.pass-color { color: #4caf50; }
+.fail-color { color: #f44336; }
+.msg { text-align: center; color: #90a4ae; font-size: 15px; margin-bottom: 16px; line-height: 1.5; }
+.center { text-align: center; }
+.mb8 { margin-bottom: 8px; }
+.gold { color: #ffd54f; }
+.user-bar { text-align: center; color: #90a4ae; font-size: 13px; margin-bottom: 12px; }
+.user-bar b { color: #4fc3f7; }
+</style>
 </head>
-<body style="background:#0a1628;color:white;font-family:Arial;text-align:center;padding:40px;">
-<h1 style="color:#4fc3f7;">SAP EC Quiz</h1>
-<p>Enter your name:</p>
-<br>
-<input type="text" id="nameBox" style="padding:14px;font-size:18px;border-radius:12px;border:2px solid #4fc3f7;background:#1a2a4a;color:white;width:80%;">
-<br><br>
-<button onclick="startApp()" style="padding:16px 40px;font-size:18px;background:#4fc3f7;color:#0a1628;border:none;border-radius:12px;font-weight:bold;">START</button>
-<div id="result" style="margin-top:20px;font-size:20px;"></div>
+<body>
+<div class="container">
+
+<!-- LOGIN -->
+<div id="pgLogin">
+  <div class="center" style="padding-top:30px;">
+    <div style="font-size:60px;margin-bottom:12px;">&#127891;</div>
+    <h1>SAP EC Core Quiz</h1>
+    <p class="msg">SuccessFactors Employee Central</p>
+  </div>
+  <div class="card">
+    <h2>Welcome!</h2>
+    <p class="msg">Enter your nickname to start.</p>
+    <input type="text" id="nameInput" class="input-field" placeholder="Your nickname..." maxlength="20">
+    <div id="nameErr" class="hide" style="color:#f44336;font-size:14px;margin-bottom:12px;">Enter at least 2 characters</div>
+    <button class="btn" onclick="doLogin()">START</button>
+  </div>
+</div>
+
+<!-- LEVELS -->
+<div id="pgLevels" class="hide">
+  <div class="user-bar">Logged in as: <b id="showUser"></b> <button class="logout-btn" onclick="doLogout()" style="background:none;border:1px solid #90a4ae;color:#90a4ae;padding:3px 10px;border-radius:10px;font-size:11px;cursor:pointer;-webkit-appearance:none;">Logout</button></div>
+  <h1>SAP EC Core Quiz</h1>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-num" id="sAttempts">0</div><div class="stat-lbl">Attempts</div></div>
+    <div class="stat-item"><div class="stat-num" id="sPassed">0</div><div class="stat-lbl">Passed</div></div>
+    <div class="stat-item"><div class="stat-num" id="sBest">0%</div><div class="stat-lbl">Best</div></div>
+  </div>
+  <p class="center gold mb8">Select a Level:</p>
+  <div class="level-grid" id="lvlGrid"></div>
+  <button class="btn" onclick="beginQuiz()">PLAY</button>
+  <div style="margin-top:20px;">
+    <p class="center" style="color:#4fc3f7;font-size:15px;margin-bottom:10px;">Recent Attempts</p>
+    <div id="histBox"></div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="pgQuiz" class="hide">
+  <h1>SAP EC Core Quiz</h1>
+  <div class="center"><span id="lvlTag" style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);padding:5px 16px;border-radius:16px;font-size:13px;">Level 1</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="progBar" style="width:0%;"></div></div>
+  <div class="counter" id="qCount">Question 1 of 10</div>
+  <div class="score-text" id="qScore">Score: 0/0</div>
+  <div class="card"><div id="qText" style="font-size:17px;line-height:1.5;"></div></div>
+  <div id="optsBox"></div>
+  <div id="expBox" class="hide"></div>
+  <button id="nxtBtn" class="btn hide" onclick="goNext()">Next</button>
+</div>
+
+<!-- RESULTS -->
+<div id="pgResult" class="hide">
+  <div style="padding-top:30px;">
+    <div class="big-icon" id="rIcon"></div>
+    <h2 id="rTitle"></h2>
+    <div class="big-score" id="rScore"></div>
+    <p class="msg" id="rMsg"></p>
+    <button class="btn btn-purple" onclick="goLevels()">Back to Levels</button>
+    <button class="btn" onclick="beginQuiz()">Retry Level</button>
+  </div>
+</div>
+
+</div>
+
 <script>
-function startApp() {
-  var name = document.getElementById('nameBox').value;
-  if (name.length < 2) {
-    document.getElementById('result').textContent = 'Please enter at least 2 characters';
+var user = null;
+var lvl = 1;
+var maxLvl = 1;
+var hist = [];
+var qs = [];
+var qi = 0;
+var sc = 0;
+var done = false;
+
+var bank = {
+1: [
+  {q:"What is Employee Central (EC) in SAP SuccessFactors?", o:["A payroll processing engine","The core HR system and single source of truth for employee data","A recruitment management tool","A learning management system"], a:1, e:"EC is the core HR system, the single source of truth for employee data from hire to termination."},
+  {q:"What does 'effective dating' mean in Employee Central?", o:["Only current data is stored","Every change has a start date; old data is not overwritten","Data is deleted after the effective date","Changes are applied without tracking"], a:1, e:"Every change has a start date. Old data is not overwritten."},
+  {q:"Which of the following is Personal Data in EC?", o:["Job title and position","Pay grade and compensation","Name, date of birth, and address","Manager assignment"], a:2, e:"Personal data = who the person is (name, date of birth, address)."},
+  {q:"Which of the following is Employment Data in EC?", o:["Date of birth","Home address","Job, position, pay, and manager","Emergency contacts"], a:2, e:"Employment data = how and where the person works (job, position, pay, manager)."},
+  {q:"What are the three employee identifiers in EC?", o:["Employee Number, SSN, Badge ID","User ID, Person ID External, and Username","Login ID, Payroll ID, Position ID","First Name, Last Name, Email"], a:1, e:"The three identifiers are User ID, Person ID External, and Username."},
+  {q:"What happens if EC data is wrong?", o:["Only EC is affected","Everything downstream is wrong","Payroll auto-corrects it","The system blocks the error"], a:1, e:"If EC data is wrong, everything downstream is wrong."},
+  {q:"What does Employee Self-Service (ESS) allow?", o:["HR admins to manage all data","Employees to view and update their own data","Managers to terminate employees","External vendors to access data"], a:1, e:"ESS allows employees to view and update their own data."},
+  {q:"What can managers do with Manager Self-Service (MSS)?", o:["Only view their own data","Manage data for their direct/indirect reports","Delete employee records","Access system configuration"], a:1, e:"MSS lets managers manage data for their direct or indirect reports."},
+  {q:"What does RBP stand for?", o:["Record-Based Processing","Role-Based Permissions","Rule-Based Provisioning","Report-Based Parameters"], a:1, e:"RBP = Role-Based Permissions."},
+  {q:"What key HR processes does EC manage?", o:["Only hiring and termination","Hiring, job changes, compensation, leave, termination","Only payroll processing","Only performance reviews"], a:1, e:"EC manages hiring, job changes, compensation, leave of absence, and termination."},
+  {q:"Employee Central is built on what type of structure?", o:["Free text fields","Structured objects","Spreadsheets","Email-based records"], a:1, e:"EC is built on structured objects, not free text."},
+  {q:"Which modules depend on Employee Central data?", o:["Only Payroll","Only Recruiting","Payroll, Time, Benefits, Reporting, and other SF modules","None - EC is standalone"], a:2, e:"EC is the data provider for Payroll, Time, Benefits, Reporting, and other SuccessFactors modules."},
+  {q:"What are the four main areas of EC Core Structure?", o:["Payroll, Benefits, Time, Recruiting","Foundation Objects, HR Objects, RBP, Self-service and Transactions","Database, API, UI, Reports","Hiring, Onboarding, Development, Offboarding"], a:1, e:"Foundation Objects, HR Objects, Role-Based Permissions, and Self-service/Transactions."},
+  {q:"How are changes made in Employee Central?", o:["By deleting and replacing data","By changing employee records (data is never deleted)","By submitting paper forms","By emailing HR directly"], a:1, e:"All processes are done by changing employee records, not by deleting or replacing data."},
+  {q:"What is the benefit of ESS for HR?", o:["It increases HR workload","It reduces HR tickets and keeps employee data up to date","It removes the need for managers","It eliminates all approvals"], a:1, e:"ESS reduces HR tickets and keeps employee data up to date."},
+  {q:"Which statement about EC data is TRUE?", o:["HR data is not reportable","HR data cannot be exported","HR data is effectively dated and controlled using RBP","HR data is only visible to admins"], a:2, e:"EC HR data is effectively dated, reportable, exportable, and controlled using RBP."}
+],
+2: [
+  {q:"What does the Succession Data Model define?", o:["The workflow approval chain","The employee data structure shown in the People Profile","Payroll calculation formulas","Recruitment pipeline stages"], a:1, e:"The Succession Data Model defines the employee data structure shown in the People Profile."},
+  {q:"How is the Succession Data Model managed?", o:["Drag-and-drop UI only","Via XML uploads in Provisioning (version-controlled)","Through SQL queries","It cannot be modified"], a:1, e:"It is version-controlled via XML uploads in Provisioning."},
+  {q:"What is the CSF Succession Data Model used for?", o:["Customer satisfaction tracking","Storing localized/country-specific fields","Corporate financial reporting","System performance monitoring"], a:1, e:"The CSF Succession Data Model stores localized fields like National ID formats."},
+  {q:"What does the Corporate Data Model define?", o:["Employee personal data","The structure of company and foundation data","Third-party integrations","Performance review criteria"], a:1, e:"It defines the structure of company and foundation data used across EC."},
+  {q:"What is BCUI?", o:["Business Central User Interface","Business Configuration UI for updating data models without XML","Batch Control User Integration","Browser-based Cloud Utility Interface"], a:1, e:"BCUI enables updating the Succession Data Model without XML intervention."},
+  {q:"What is recommended instead of deleting an unnecessary field?", o:["Archive it","Change its visibility to none","Rename it","Move it to another model"], a:1, e:"It is highly recommended to change visibility to none rather than delete."},
+  {q:"Changes to the data model must comply with what?", o:["Company policy only","The Data Type Definition (DTD)","Manager approval","No compliance needed"], a:1, e:"Changes must comply with the Data Type Definition (DTD)."},
+  {q:"Which HRIS elements support country-specific configuration?", o:["Only Job Information","Only Compensation Information","Global Info, Addresses, National ID, Job Info, Comp Info, Employment Info","Only Personal Information"], a:2, e:"Supported for globalInfo, homeAddress, nationalIdCard, jobInfo, compInfo, and employmentInfo."},
+  {q:"What does HRIS Synchronization do?", o:["Syncs EC with third-party payroll","Copies EC data to the Employee Profile for talent modules","Backs up all data to the cloud","Syncs time-off balances"], a:1, e:"HRIS Sync copies data from EC to other parts of SuccessFactors."},
+  {q:"In which direction does data flow during HRIS Sync?", o:["Both directions","From Employee Central to other modules (one-way)","From other modules to EC","Manually copied"], a:1, e:"Data flows one way only from EC to other modules."},
+  {q:"What triggers HRIS Sync when data is changed in the UI?", o:["Manual admin action","The sync runs automatically","A scheduled batch only","An email notification"], a:1, e:"When data is changed in the UI, the sync runs automatically."},
+  {q:"What is a Person Type in EC?", o:["A classification for termination reasons","A set of fields specific to a group of persons","A type of foundation object","A workflow participant role"], a:1, e:"Person Types define a set of fields specific to a group of persons."},
+  {q:"Where can Person Types be added?", o:["Only in XML","Only in BCUI","Both XML and BCUI","Only in Provisioning"], a:1, e:"Person Types can only be added in BCUI."},
+  {q:"What advantage does XML have over BCUI?", o:["XML is simpler to use","XML allows simultaneous changes with backup versioning","XML has a better UI","XML does not need Provisioning"], a:1, e:"XML allows simultaneous changes to multiple fields with backup versioning."},
+  {q:"What is the standard picklist in EC?", o:["A dropdown created by employees","SAP-provided picklist uploaded during implementation","A reporting filter","A search tool"], a:1, e:"SAP provides a standard picklist uploaded as part of implementation."},
+  {q:"For picklist imports, what does ZIP import support?", o:["Incremental load only","Full purge only","Both incremental and full purge","Partial import only"], a:1, e:"ZIP import only supports full purge. CSV supports both."}
+],
+3: [
+  {q:"What are Foundation Objects in EC?", o:["Default system templates","Objects that hold company-specific data","Pre-built workflow configs","Standard reporting tools"], a:1, e:"Foundation Objects hold company-specific data."},
+  {q:"Foundation Objects must be built before what?", o:["Workflows are configured","Any employee data can be added","Reports are generated","Permissions are set"], a:1, e:"They must be built before any employee data can be added."},
+  {q:"Foundation Objects are managed in which two ways?", o:["Email and phone","MDF through Configure Object Definitions and XML in Corporate Data Model","Only Provisioning","Only Admin Center"], a:1, e:"MDF through Configure Object Definitions, or XML in the Corporate Data Model."},
+  {q:"What are Foundation Object Associations?", o:["Links between employees","Links between company lists that control valid value combinations","Database joins","API connections"], a:1, e:"Associations are links between company lists controlling valid options."},
+  {q:"What is the effect of Foundation Object Associations?", o:["They slow down the system","Users only see valid values based on selections","They create duplicates","They block all changes"], a:1, e:"When a US Legal Entity is selected, only US locations appear."},
+  {q:"Which of these is NOT a Foundation Object?", o:["Legal Entity","Pay Grade","Cost Center","Employee Performance Review"], a:3, e:"Performance Review is not a Foundation Object."},
+  {q:"Where are MDF-based Foundation Objects managed?", o:["Only in Provisioning","Fully managed in Admin Center","Only via XML","Only through API"], a:1, e:"MDF Foundation Objects are fully managed in Admin Center."},
+  {q:"What permission controls XML-based foundation object structure?", o:["Employee Data","Manage Foundation Object Types","MDF Foundation Objects","Manage Hires"], a:1, e:"Manage Foundation Object Types controls the structure."},
+  {q:"What does Manage Foundation Objects permission control?", o:["Structure of foundation objects","Data inside foundation objects","Workflow approvals","Employee terminations"], a:1, e:"It controls data inside foundation objects."},
+  {q:"The Corporate Data Model categories include:", o:["Only organization-related","Organization-related, Pay-related, Job-related, and Other","Only pay-related","Only job-related"], a:1, e:"Categories: Organization-related, Pay-related, Job-related, Other."},
+  {q:"If Admin Center can manage a foundation object, what about XML?", o:["Always use XML as backup","XML should not be touched","Use both simultaneously","Delete the XML version"], a:1, e:"If Admin Center can do it, XML should not be touched."},
+  {q:"What does the CSF Corporate Data Model contain?", o:["Global company data","Country-specific extensions of the Corporate Data Model","Employee personal data","System config settings"], a:1, e:"Country-specific extension for local org structures and foundation data."},
+  {q:"Which tool helps identify invalid picklist references?", o:["Diagnostic Tool","Check Tool","HRIS Sync Tool","Import Wizard"], a:1, e:"The Check Tool helps identify invalid picklist references."},
+  {q:"What is the relationship between Corporate Data Model and MDF?", o:["They are the same thing","Corporate Data Model equals structure, MDF equals modern way to manage objects without XML","MDF replaced Corporate Data Model","They are unrelated"], a:1, e:"Corporate Data Model is structure, MDF is modern way to manage many foundation objects without XML."},
+  {q:"Which is an example of an XML-based Foundation Object change?", o:["Adding a new department value","Renaming a field like Dept Code to Department ID","Creating a new legal entity","Changing a picklist value"], a:1, e:"Renaming fields (structure changes) requires XML."},
+  {q:"When is Manage Foundation Object Types available?", o:["Always","Only after Corporate Data Model is uploaded","Only during implementation","Only in test environments"], a:1, e:"Available only after the Corporate Data Model is uploaded."}
+],
+4: [
+  {q:"What are the three components of a Business Rule?", o:["Input, Process, Output","IF (Condition), THEN (Action), Trigger (Rule Event)","Start, Execute, End","Query, Filter, Result"], a:1, e:"Business Rules have IF, THEN, and Trigger."},
+  {q:"What is the purpose of Event Reason Derivation rules?", o:["Manually assign event reasons","Automatically choose the correct event reason when data changes","Delete event reasons","Create new event categories"], a:1, e:"They automatically choose the correct event reason."},
+  {q:"Why is the event reason so important?", o:["It is just a label","It controls the employee status (active/inactive)","It determines salary","It sets the hire date"], a:1, e:"The event reason controls employee status."},
+  {q:"What are the three workflow participant roles?", o:["Admin, User, Guest","Approvers, Contributors, CC Role","Manager, Employee, HR","Initiator, Reviewer, Closer"], a:1, e:"Approvers, Contributors, and CC Role."},
+  {q:"What is the Four-Eye Principle?", o:["Biometric verification","The initiator cannot approve - two people must be involved","A four-step chain","Visual inspection"], a:1, e:"The person who starts a workflow cannot approve it."},
+  {q:"What happens with Workflow Skip Logic?", o:["All steps always execute","System skips repeated single-approver steps automatically","Workflows are cancelled","Only first step runs"], a:1, e:"System skips repeated approval steps for same single approver."},
+  {q:"Can steps with multiple approvers be skipped?", o:["Yes, always","No, never","Only if configured","Only on weekends"], a:1, e:"Steps with multiple approvers are never skipped."},
+  {q:"Where is Skip Logic enabled?", o:["In Provisioning","In Company System and Logo Settings","In Workflow XML","In Admin Center only"], a:1, e:"Skip logic is enabled in Company System and Logo Settings."},
+  {q:"What are Dynamic Groups used for in workflows?", o:["Creating teams","Assigning group members as workflow approvers","Generating reports","Managing permissions"], a:1, e:"Requests are sent to all group members when a dynamic group is used."},
+  {q:"Order of onSave rules for Job Information changes?", o:["Workflow then Event Reason then Job Info","Job Info rules then Event Reason rules then Workflow rules","Event Reason then Job Info then Workflow","Random order"], a:1, e:"Job Info rules then Event Reason rules then Workflow rules."},
+  {q:"When a workflow subject is also an approver?", o:["They approve their own change","System replaces them with their manager","Workflow is cancelled","Nothing changes"], a:1, e:"The system replaces them with their manager."},
+  {q:"What is No Approver Behavior?", o:["Always auto-approve","Defines what happens if no approver found: skip or stop","Send to HR admin","Retry after 24 hours"], a:1, e:"Options: Skip this step, or Stop the workflow."},
+  {q:"How many cross-entity rules are allowed?", o:["Unlimited","Only 5","Only 10","Only 1"], a:1, e:"Currently only five cross-entity rules are allowed."},
+  {q:"Who creates Event Reasons?", o:["SAP only","Customers or consultants","Employees","The system automatically"], a:1, e:"Event Reasons are created by customers or consultants."},
+  {q:"What should the first IF check in Event Reason Derivation?", o:["If employee is active","If event reason is not null then set blank","If manager approved","If date is valid"], a:1, e:"Check if event reason is NOT EQUAL to Null with THEN blank to prevent overwriting."},
+  {q:"How can standard workflow email templates be customized?", o:["Fully per participant","Only slightly with tags; full custom needs Document Generation","Cannot be edited","Through CSS"], a:1, e:"Standard templates can only be slightly edited with tags. Full custom requires Document Generation."}
+],
+5: [
+  {q:"What does Duplicate Validation check during hiring?", o:["Duplicate job postings","If the person already exists by name, DOB, national ID","Duplicate workflows","Duplicate foundation objects"], a:1, e:"System compares name, date of birth, and national ID."},
+  {q:"What happens during a Rehire?", o:["A new person record is created","Existing Person ID External reused, new employment created","Old employment restored","Termination deleted"], a:1, e:"Rehire reuses Person ID External and creates new employment."},
+  {q:"What does Termination affect in EC?", o:["Person Data","Employment Information only","Both Person and Employment","Foundation Objects"], a:1, e:"Termination affects Employment Information, not Person Data."},
+  {q:"What are the three data import types?", o:["Manual, Auto, Scheduled","Full Purge, Incremental Load, Partial Import","Insert, Update, Delete","CSV, XML, JSON"], a:1, e:"Full Purge, Incremental Load, and Partial Import."},
+  {q:"What is Joule in SAP?", o:["A Java framework","SAP AI copilot for natural language tasks","A payroll engine","A database tool"], a:1, e:"Joule is SAP AI copilot."},
+  {q:"What is the purpose of EC Quick Actions?", o:["Admin shortcuts","Make self-service faster by showing only needed fields","Quick reporting","Fast data deletion"], a:1, e:"Quick Actions show only the fields needed for a specific task."},
+  {q:"How many Quick Action templates per use case?", o:["Unlimited","Up to 5","Up to 10","Only 1"], a:1, e:"Up to 5 templates for each use case."},
+  {q:"What does the Diagnostic Tool capture for workflows?", o:["Only email logs","Workflow IDs, rules, participants, email info, all actions","Only timestamps","Only errors"], a:1, e:"Captures Workflow IDs, derivation rules, participants, email info, and all actions."},
+  {q:"How long is diagnostic data retained?", o:["1 day","10 days extended 10 more when action taken","30 days","Permanently"], a:1, e:"Retained 10 days, extended another 10 when action is taken."},
+  {q:"Can the Diagnostic Tool capture mobile approvals?", o:["Yes, all platforms","No, only web browser Workflow Details page","Only iOS","Only Android"], a:1, e:"Cannot capture mobile, quick approval card, or Manage Workflow Requests."},
+  {q:"How long does the Diagnostics Trace run?", o:["5 minutes","15 minutes","1 hour","24 hours"], a:1, e:"The trace captures transactions for 15 minutes."},
+  {q:"What does Mass Data Management support?", o:["All EC objects","Position, Job Information, and Job Relationships","Only Foundation Objects","Only Personal Data"], a:1, e:"Supports Position, Job Information, and Job Relationships."},
+  {q:"How many records can be selected in Mass Data Management?", o:["Up to 100","Up to 500","Up to 1000","Unlimited"], a:2, e:"Up to 1000 records."},
+  {q:"Required HRIS elements in every Custom Hire Template?", o:["Only Job Info","Name Info, Bio Info, Employment ID, Employment Info, Job Info, Personal Info","Only Personal Info","All are optional"], a:1, e:"Required: Name Info, Bio Info, Employment ID, Employment Info, Job Info, Personal Info."},
+  {q:"How many pages can a Custom Hire Template have?", o:["Only 1","Between 2 and 10","Unlimited","Between 1 and 5"], a:1, e:"Between 2 and 10 pages. One-page templates are not allowed."},
+  {q:"What is the Internal Job History Block?", o:["Full editable history","Limited read-only job history for broader audience","A system log","A workflow history"], a:1, e:"Shows limited, read-only job history to managers without full edit access."}
+]
+};
+
+function save() {
+  try {
+    localStorage.setItem('sq_user', user);
+    localStorage.setItem('sq_maxLvl', maxLvl);
+    localStorage.setItem('sq_hist', JSON.stringify(hist));
+  } catch(x) {}
+}
+
+function load() {
+  try {
+    maxLvl = parseInt(localStorage.getItem('sq_maxLvl')) || 1;
+    hist = JSON.parse(localStorage.getItem('sq_hist') || '[]');
+  } catch(x) { maxLvl = 1; hist = []; }
+}
+
+function showPg(id) {
+  var pages = ['pgLogin','pgLevels','pgQuiz','pgResult'];
+  for (var i = 0; i < pages.length; i++) {
+    document.getElementById(pages[i]).className = (pages[i] === id) ? 'show' : 'hide';
+  }
+  window.scrollTo(0, 0);
+}
+
+function doLogin() {
+  var n = document.getElementById('nameInput').value.trim();
+  if (n.length < 2) {
+    document.getElementById('nameErr').className = 'show';
     return;
   }
-  document.getElementById('result').textContent = 'Welcome, ' + name + '! App is working!';
+  document.getElementById('nameErr').className = 'hide';
+  user = n;
+  load();
+  save();
+  document.getElementById('showUser').textContent = user;
+  drawLevels();
+  drawHist();
+  drawStats();
+  showPg('pgLevels');
 }
+
+function doLogout() {
+  user = null;
+  try { localStorage.removeItem('sq_user'); } catch(x) {}
+  document.getElementById('nameInput').value = '';
+  showPg('pgLogin');
+}
+
+function drawLevels() {
+  var g = document.getElementById('lvlGrid');
+  g.innerHTML = '';
+  var names = ['Fundamentals','Data Models','Foundation Obj','Rules and Workflows','Advanced'];
+  for (var i = 1; i <= 5; i++) {
+    var b = document.createElement('button');
+    var cls = 'level-btn';
+    if (i > maxLvl) cls += ' shut';
+    else if (i === lvl) cls += ' picked';
+    else cls += ' open';
+    b.className = cls;
+    b.innerHTML = '<div><b>Lvl ' + i + '</b></div><div style="font-size:11px;">' + names[i-1] + '</div><div style="font-size:11px;">' + (i <= maxLvl ? 'Unlocked' : 'Locked') + '</div>';
+    (function(x) { b.onclick = function() { if (x <= maxLvl) { lvl = x; drawLevels(); } }; })(i);
+    g.appendChild(b);
+  }
+}
+
+function drawStats() {
+  var t = hist.length;
+  var p = 0;
+  var b = 0;
+  for (var i = 0; i < t; i++) {
+    if (hist[i].s >= 8) p++;
+    if (hist[i].s > b) b = hist[i].s;
+  }
+  document.getElementById('sAttempts').textContent = t;
+  document.getElementById('sPassed').textContent = p;
+  document.getElementById('sBest').textContent = (t > 0 ? b * 10 : 0) + '%';
+}
+
+function drawHist() {
+  var box = document.getElementById('histBox');
+  if (hist.length === 0) { box.innerHTML = '<p class="center" style="color:#546e7a;font-size:13px;">No attempts yet</p>'; return; }
+  var names = ['','Fundamentals','Data Models','Foundation Obj','Rules/Workflows','Advanced'];
+  var h = '';
+  var mx = hist.length > 8 ? 8 : hist.length;
+  for (var i = 0; i < mx; i++) {
+    var r = hist[i];
+    var pc = r.s >= 8 ? 'h-pass' : 'h-fail';
+    h += '<div class="hist-item"><span class="h-lvl">Lvl ' + r.l + ' ' + names[r.l] + '</span><span class="' + pc + '">' + r.s + '/10</span><span class="h-date">' + r.d + '</span></div>';
+  }
+  box.innerHTML = h;
+}
+
+function shuffle(a) {
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function beginQuiz() {
+  var pool = bank[lvl].slice();
+  qs = shuffle(pool).slice(0, 10);
+  qi = 0; sc = 0; done = false;
+  document.getElementById('lvlTag').textContent = 'Level ' + lvl;
+  showPg('pgQuiz');
+  showQ();
+}
+
+function showQ() {
+  var q = qs[qi];
+  document.getElementById('qCount').textContent = 'Question ' + (qi + 1) + ' of 10';
+  document.getElementById('qScore').textContent = 'Score: ' + sc + '/' + qi;
+  document.getElementById('progBar').style.width = (qi / 10 * 100) + '%';
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('expBox').className = 'hide';
+  document.getElementById('nxtBtn').className = 'btn hide';
+  done = false;
+  var letters = ['A','B','C','D'];
+  var box = document.getElementById('optsBox');
+  box.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.innerHTML = '<span class="letter">' + letters[i] + '</span><span>' + q.o[i] + '</span>';
+    (function(idx) { b.onclick = function() { pick(idx); }; })(i);
+    box.appendChild(b);
+  }
+}
+
+function pick(sel) {
+  if (done) return;
+  done = true;
+  var q = qs[qi];
+  var btns = document.getElementById('optsBox').getElementsByTagName('button');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.add('dim');
+    if (i === q.a) btns[i].classList.add('correct');
+    if (i === sel && sel !== q.a) btns[i].classList.add('wrong');
+  }
+  if (sel === q.a) sc++;
+  var exp = document.getElementById('expBox');
+  if (sel === q.a) {
+    exp.className = 'explain';
+    exp.textContent = 'Correct! ' + q.e;
+  } else {
+    exp.className = 'explain wrong-box';
+    exp.textContent = 'Incorrect. ' + q.e;
+  }
+  var nb = document.getElementById('nxtBtn');
+  nb.className = 'btn show';
+  nb.textContent = qi === 9 ? 'See Results' : 'Next';
+}
+
+function goNext() {
+  qi++;
+  if (qi >= 10) { showResult(); return; }
+  showQ();
+}
+
+function showResult() {
+  var ok = sc >= 8;
+  document.getElementById('rIcon').textContent = ok ? 'Trophy!' : 'Keep going!';
+  document.getElementById('rIcon').textContent = ok ? '\uD83C\uDFC6' : '\uD83D\uDCAA';
+  document.getElementById('rTitle').textContent = ok ? 'LEVEL PASSED!' : 'NOT YET...';
+  var rs = document.getElementById('rScore');
+  rs.textContent = sc + ' / 10';
+  rs.className = ok ? 'big-score pass-color' : 'big-score fail-color';
+  if (ok) {
+    document.getElementById('rMsg').textContent = lvl < 5 ? 'Level ' + (lvl + 1) + ' unlocked!' : 'You completed ALL levels! SAP EC Master!';
+    if (lvl < 5 && lvl + 1 > maxLvl) maxLvl = lvl + 1;
+  } else {
+    document.getElementById('rMsg').textContent = 'You need 8/10 to pass. You got ' + sc + '. Keep studying!';
+  }
+  var now = new Date();
+  var ds = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
+  hist.unshift({l: lvl, s: sc, d: ds});
+  if (hist.length > 50) hist = hist.slice(0, 50);
+  save();
+  showPg('pgResult');
+}
+
+function goLevels() {
+  drawLevels();
+  drawHist();
+  drawStats();
+  showPg('pgLevels');
+}
+
+// Auto-login
+try {
+  var su = localStorage.getItem('sq_user');
+  if (su) {
+    document.getElementById('nameInput').value = su;
+  }
+} catch(x) {}
 </script>
 </body>
 </html>
