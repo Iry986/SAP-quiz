@@ -3,17 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SAP EC Quiz">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>SAP EC Core Quiz</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a1628; color: #fff; min-height: 100vh; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a1628; color: #fff; min-height: 100vh; -webkit-text-size-adjust: 100%; }
 .container { max-width: 600px; margin: 0 auto; padding: 20px; }
 .header { text-align: center; padding: 20px 0; }
 .header h1 { font-size: 24px; color: #4fc3f7; }
 .header .level-badge { display: inline-block; background: linear-gradient(135deg, #667eea, #764ba2); padding: 6px 18px; border-radius: 20px; font-size: 14px; margin-top: 8px; }
 .user-info { text-align: center; color: #90a4ae; font-size: 13px; margin-bottom: 10px; }
 .user-info span { color: #4fc3f7; font-weight: bold; }
-.logout-btn { background: none; border: 1px solid #90a4ae; color: #90a4ae; padding: 4px 12px; border-radius: 12px; font-size: 12px; cursor: pointer; margin-left: 8px; }
+.logout-btn { background: none; border: 1px solid #90a4ae; color: #90a4ae; padding: 4px 12px; border-radius: 12px; font-size: 12px; cursor: pointer; margin-left: 8px; -webkit-appearance: none; }
 .progress-bar { background: #1a2a4a; border-radius: 10px; height: 8px; margin: 15px 0; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, #4fc3f7, #00e676); border-radius: 10px; transition: width 0.5s ease; }
 .question-counter { text-align: center; color: #90a4ae; font-size: 14px; margin-bottom: 10px; }
@@ -21,7 +26,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .question-card { background: #132042; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
 .question-text { font-size: 18px; line-height: 1.5; font-weight: 500; }
 .options { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-.option-btn { background: #1a2a4a; border: 2px solid #2a3a5a; border-radius: 12px; padding: 16px 20px; font-size: 16px; color: #fff; cursor: pointer; text-align: left; transition: all 0.3s ease; display: flex; align-items: center; gap: 12px; }
+.option-btn { background: #1a2a4a; border: 2px solid #2a3a5a; border-radius: 12px; padding: 16px 20px; font-size: 16px; color: #fff; cursor: pointer; text-align: left; transition: all 0.3s ease; display: flex; align-items: center; gap: 12px; -webkit-appearance: none; }
 .option-btn:active { transform: scale(0.98); }
 .option-btn .letter { background: #2a3a5a; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; flex-shrink: 0; }
 .option-btn.correct { background: #1b5e20; border-color: #4caf50; }
@@ -32,20 +37,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .option-btn.disabled.correct { opacity: 1; }
 .explanation { background: #1a3a2a; border-left: 4px solid #4caf50; border-radius: 8px; padding: 16px; margin-top: 16px; font-size: 14px; line-height: 1.5; color: #a5d6a7; display: none; }
 .explanation.wrong-exp { background: #3a1a1a; border-left-color: #f44336; color: #ef9a9a; }
-.next-btn { display: none; width: 100%; background: linear-gradient(135deg, #4fc3f7, #0288d1); border: none; border-radius: 12px; padding: 16px; font-size: 18px; color: #fff; cursor: pointer; margin-top: 16px; font-weight: bold; }
+.next-btn { display: none; width: 100%; background: linear-gradient(135deg, #4fc3f7, #0288d1); border: none; border-radius: 12px; padding: 16px; font-size: 18px; color: #fff; cursor: pointer; margin-top: 16px; font-weight: bold; -webkit-appearance: none; }
 .next-btn:active { transform: scale(0.98); }
 .screen { display: none; text-align: center; padding: 40px 20px; }
 .screen.active { display: block; }
 .screen h2 { font-size: 28px; margin-bottom: 16px; }
 .screen p { font-size: 16px; color: #90a4ae; margin-bottom: 8px; line-height: 1.6; }
-.start-btn { display: inline-block; background: linear-gradient(135deg, #4fc3f7, #0288d1); border: none; border-radius: 12px; padding: 16px 48px; font-size: 20px; color: #fff; cursor: pointer; margin-top: 24px; font-weight: bold; }
+.start-btn { display: inline-block; background: linear-gradient(135deg, #4fc3f7, #0288d1); border: none; border-radius: 12px; padding: 16px 48px; font-size: 20px; color: #fff; cursor: pointer; margin-top: 24px; font-weight: bold; -webkit-appearance: none; }
 .start-btn:active { transform: scale(0.98); }
 .result-icon { font-size: 80px; margin-bottom: 16px; }
 .result-score { font-size: 48px; font-weight: bold; margin: 16px 0; }
 .result-score.pass { color: #4caf50; }
 .result-score.fail { color: #f44336; }
 .level-select { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 24px 0; }
-.level-btn { background: #1a2a4a; border: 2px solid #2a3a5a; border-radius: 12px; padding: 12px 20px; font-size: 16px; color: #fff; cursor: pointer; min-width: 100px; }
+.level-btn { background: #1a2a4a; border: 2px solid #2a3a5a; border-radius: 12px; padding: 12px 20px; font-size: 16px; color: #fff; cursor: pointer; min-width: 100px; -webkit-appearance: none; }
 .level-btn.unlocked { border-color: #4fc3f7; }
 .level-btn.locked { opacity: 0.4; pointer-events: none; }
 .level-btn.current { background: linear-gradient(135deg, #667eea, #764ba2); border-color: #667eea; }
@@ -54,7 +59,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .login-box { background: #132042; border-radius: 16px; padding: 32px; margin: 40px auto; max-width: 400px; }
 .login-box h2 { color: #4fc3f7; margin-bottom: 8px; }
 .login-box p { color: #90a4ae; font-size: 14px; margin-bottom: 24px; }
-.login-input { width: 100%; padding: 14px 18px; font-size: 18px; border: 2px solid #2a3a5a; border-radius: 12px; background: #1a2a4a; color: #fff; outline: none; margin-bottom: 16px; }
+.login-input { width: 100%; padding: 14px 18px; font-size: 18px; border: 2px solid #2a3a5a; border-radius: 12px; background: #1a2a4a; color: #fff; outline: none; margin-bottom: 16px; -webkit-appearance: none; }
 .login-input:focus { border-color: #4fc3f7; }
 .login-input::placeholder { color: #546e7a; }
 .login-error { color: #f44336; font-size: 14px; margin-bottom: 12px; display: none; }
@@ -143,18 +148,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 
 </div>
 
-<script>
+<script charset="utf-8">
 // ============================================================
-// 🔑 JSONBIN CONFIG — REPLACE WITH YOUR OWN VALUES!
+// JSONBIN CONFIG
 // ============================================================
-const JSONBIN_API_KEY = '$2a$10$Z1ijjFueKCcluP2qAt1qUODHVP1G3xWnVIsc.I6ob2inr9iNfRWwq';  // ← Paste your JSONBin Master Key here
-// ============================================================
-
-const JSONBIN_BASE = 'https://api.jsonbin.io/v3';
-let userBinId = null;
+var JSONBIN_API_KEY = '$2a$10$Z1ijjFueKCcluP2qAt1qUODHVP1G3xWnVIsc.I6ob2inr9iNfRWwq';
+var JSONBIN_BASE = 'https://api.jsonbin.io/v3';
+var userBinId = null;
 
 // ===== QUESTION BANK =====
-const allQuestions = {
+var allQuestions = {
 
 1: [
   {q:"What is Employee Central (EC) in SAP SuccessFactors?", o:["A payroll processing engine","The core HR system and single source of truth for employee data","A recruitment management tool","A learning management system"], a:1, e:"EC is the core HR system, the single source of truth for employee data from hire to termination."},
@@ -263,146 +266,101 @@ const allQuestions = {
 };
 
 // ===== GAME STATE =====
-let currentUser = null;
-let currentLevel = 1;
-let maxUnlocked = 1;
-let currentQuestions = [];
-let currentIndex = 0;
-let score = 0;
-let answered = false;
-let history = [];
+var currentUser = null;
+var currentLevel = 1;
+var maxUnlocked = 1;
+var currentQuestions = [];
+var currentIndex = 0;
+var score = 0;
+var answered = false;
+var history = [];
 
 // ===== JSONBIN CLOUD FUNCTIONS =====
+function loadUserData(username) {
+  return new Promise(function(resolve) {
+    var key = 'sap_bin_' + username.toLowerCase();
+    var savedBinId = null;
+    try { savedBinId = localStorage.getItem(key); } catch(e) {}
 
-// Find user's bin by searching
-async function findUserBin(username) {
-  try {
-    const res = await fetch(JSONBIN_BASE + '/c/uncategorized/bins', {
-      headers: { 'X-Master-Key': JSONBIN_API_KEY }
-    });
-    if (!res.ok) return null;
-    const bins = await res.json();
-    // Search through bins to find matching user
-    for (const bin of bins) {
-      try {
-        const binRes = await fetch(JSONBIN_BASE + '/b/' + bin.record, {
-          headers: { 'X-Master-Key': JSONBIN_API_KEY }
-        });
-        if (binRes.ok) {
-          const data = await binRes.json();
-          if (data.record && data.record.username === username.toLowerCase()) {
-            return { id: bin.record, data: data.record };
-          }
-        }
-      } catch(e) { continue; }
-    }
-    return null;
-  } catch(e) { return null; }
-}
-
-// Simpler approach: use username as part of bin name
-async function loadUserData(username) {
-  const key = 'sap_bin_' + username.toLowerCase();
-  const savedBinId = localStorage.getItem(key);
-  
-  // Try to load from existing bin
-  if (savedBinId) {
-    try {
-      const res = await fetch(JSONBIN_BASE + '/b/' + savedBinId + '/latest', {
+    if (savedBinId) {
+      fetch(JSONBIN_BASE + '/b/' + savedBinId + '/latest', {
+        method: 'GET',
         headers: { 'X-Master-Key': JSONBIN_API_KEY }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.record) {
+      })
+      .then(function(res) { return res.ok ? res.json() : Promise.reject('not found'); })
+      .then(function(data) {
+        if (data && data.record) {
           maxUnlocked = data.record.maxUnlocked || 1;
           history = data.record.history || [];
           userBinId = savedBinId;
-          return;
         }
-      }
-    } catch(e) { console.log('Load error:', e); }
-  }
-  
-  // No existing bin found — create new one
-  try {
-    const res = await fetch(JSONBIN_BASE + '/b', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': JSONBIN_API_KEY,
-        'X-Bin-Name': 'sap-quiz-' + username.toLowerCase()
-      },
-      body: JSON.stringify({
-        username: username.toLowerCase(),
-        maxUnlocked: 1,
-        history: [],
-        lastActive: new Date().toISOString()
+        resolve();
       })
-    });
-    if (res.ok) {
-      const data = await res.json();
-      userBinId = data.metadata.id;
-      localStorage.setItem(key, userBinId);
-      maxUnlocked = 1;
-      history = [];
-    }
-  } catch(e) { console.log('Create error:', e); }
-  
-  // Fallback to localStorage
-  if (!userBinId) {
-    maxUnlocked = parseInt(localStorage.getItem('sap_maxLevel_' + username)) || 1;
-    history = JSON.parse(localStorage.getItem('sap_history_' + username) || '[]');
-  }
-}
-
-async function saveUserData() {
-  const username = currentUser.toLowerCase();
-  
-  // Save to localStorage always (backup)
-  localStorage.setItem('sap_maxLevel_' + username, maxUnlocked);
-  localStorage.setItem('sap_history_' + username, JSON.stringify(history));
-  
-  // Save to cloud
-  if (userBinId) {
-    try {
-      await fetch(JSONBIN_BASE + '/b/' + userBinId, {
-        method: 'PUT',
+      .catch(function() {
+        maxUnlocked = parseInt(localStorage.getItem('sap_maxLevel_' + username)) || 1;
+        history = JSON.parse(localStorage.getItem('sap_history_' + username) || '[]');
+        resolve();
+      });
+    } else {
+      // Create new bin
+      fetch(JSONBIN_BASE + '/b', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Master-Key': JSONBIN_API_KEY
+          'X-Master-Key': JSONBIN_API_KEY,
+          'X-Bin-Name': 'sap-quiz-' + username.toLowerCase()
         },
         body: JSON.stringify({
-          username: username,
-          maxUnlocked: maxUnlocked,
-          history: history.slice(0, 50),
+          username: username.toLowerCase(),
+          maxUnlocked: 1,
+          history: [],
           lastActive: new Date().toISOString()
         })
+      })
+      .then(function(res) { return res.ok ? res.json() : Promise.reject('create failed'); })
+      .then(function(data) {
+        userBinId = data.metadata.id;
+        try { localStorage.setItem(key, userBinId); } catch(e) {}
+        maxUnlocked = 1;
+        history = [];
+        resolve();
+      })
+      .catch(function() {
+        maxUnlocked = parseInt(localStorage.getItem('sap_maxLevel_' + username)) || 1;
+        history = JSON.parse(localStorage.getItem('sap_history_' + username) || '[]');
+        resolve();
       });
-    } catch(e) { console.log('Save error:', e); }
-  }
+    }
+  });
 }
 
-// ===== CROSS-DEVICE SYNC =====
-// When logging in on a NEW device, we need to find the bin ID
-async function syncFromOtherDevice(username) {
-  const key = 'sap_bin_' + username.toLowerCase();
-  if (localStorage.getItem(key)) return; // Already have bin ID on this device
-  
-  // Try to find bin by listing all bins
+function saveUserData() {
+  var username = currentUser.toLowerCase();
   try {
-    const res = await fetch(JSONBIN_BASE + '/c/uncategorized/bins', {
-      headers: { 
-        'X-Master-Key': JSONBIN_API_KEY,
-        'X-Bin-Name': 'sap-quiz-' + username.toLowerCase()
-      }
-    });
-    // If we can find it, we'll get it during loadUserData
+    localStorage.setItem('sap_maxLevel_' + username, maxUnlocked);
+    localStorage.setItem('sap_history_' + username, JSON.stringify(history));
   } catch(e) {}
+
+  if (userBinId) {
+    fetch(JSONBIN_BASE + '/b/' + userBinId, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_API_KEY
+      },
+      body: JSON.stringify({
+        username: username,
+        maxUnlocked: maxUnlocked,
+        history: history.slice(0, 50),
+        lastActive: new Date().toISOString()
+      })
+    }).catch(function(e) { console.log('Save error:', e); });
+  }
 }
 
 // ===== LOGIN =====
-async function login() {
-  const input = document.getElementById('loginInput').value.trim();
+function login() {
+  var input = document.getElementById('loginInput').value.trim();
   if (input.length < 2) {
     document.getElementById('loginError').style.display = 'block';
     return;
@@ -410,32 +368,33 @@ async function login() {
   document.getElementById('loginError').style.display = 'none';
   document.getElementById('loginLoading').style.display = 'block';
   document.getElementById('loginBtn').style.display = 'none';
-  
+
   currentUser = input;
-  localStorage.setItem('sap_currentUser', currentUser);
-  
-  await loadUserData(currentUser);
-  
-  document.getElementById('loginLoading').style.display = 'none';
-  document.getElementById('loginBtn').style.display = 'inline-block';
-  document.getElementById('displayName').textContent = currentUser;
-  renderLevels();
-  renderHistory();
-  renderStats();
-  showScreen('startScreen');
+  try { localStorage.setItem('sap_currentUser', currentUser); } catch(e) {}
+
+  loadUserData(currentUser).then(function() {
+    document.getElementById('loginLoading').style.display = 'none';
+    document.getElementById('loginBtn').style.display = 'inline-block';
+    document.getElementById('displayName').textContent = currentUser;
+    renderLevels();
+    renderHistory();
+    renderStats();
+    showScreen('startScreen');
+  });
 }
 
 function logout() {
   currentUser = null;
   userBinId = null;
-  localStorage.removeItem('sap_currentUser');
+  try { localStorage.removeItem('sap_currentUser'); } catch(e) {}
   document.getElementById('loginInput').value = '';
   showScreen('loginScreen');
 }
 
 // Auto-login
 (function autoLogin() {
-  const saved = localStorage.getItem('sap_currentUser');
+  var saved = null;
+  try { saved = localStorage.getItem('sap_currentUser'); } catch(e) {}
   if (saved) {
     currentUser = saved;
     document.getElementById('loginInput').value = saved;
@@ -449,54 +408,65 @@ document.getElementById('loginInput').addEventListener('keypress', function(e) {
 
 // ===== SCREENS =====
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) {
+    screens[i].classList.remove('active');
+  }
   document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
 }
 
 function renderLevels() {
-  const c = document.getElementById('levelSelect');
+  var c = document.getElementById('levelSelect');
   c.innerHTML = '';
-  const names = ['Fundamentals','Data Models','Foundation Objects','Rules & Workflows','Advanced Topics'];
-  for (let i = 1; i <= 5; i++) {
-    const btn = document.createElement('button');
+  var names = ['Fundamentals','Data Models','Foundation Objects','Rules & Workflows','Advanced Topics'];
+  for (var i = 1; i <= 5; i++) {
+    var btn = document.createElement('button');
     btn.className = 'level-btn ' + (i <= maxUnlocked ? (i === currentLevel ? 'current' : 'unlocked') : 'locked');
-    btn.innerHTML = `<div><b>Level ${i}</b></div><div style="font-size:12px">${names[i-1]}</div>${i <= maxUnlocked ? '<div class="stars">★ Unlocked</div>' : '<div class="stars">🔒 Locked</div>'}`;
-    btn.onclick = () => { if (i <= maxUnlocked) { currentLevel = i; renderLevels(); }};
+    btn.innerHTML = '<div><b>Level ' + i + '</b></div><div style="font-size:12px">' + names[i-1] + '</div>' + (i <= maxUnlocked ? '<div class="stars">\u2605 Unlocked</div>' : '<div class="stars">\uD83D\uDD12 Locked</div>');
+    (function(level) {
+      btn.onclick = function() { if (level <= maxUnlocked) { currentLevel = level; renderLevels(); }};
+    })(i);
     c.appendChild(btn);
   }
 }
 
 function renderHistory() {
-  const list = document.getElementById('historyList');
+  var list = document.getElementById('historyList');
   if (history.length === 0) { list.innerHTML = '<div class="no-history">No attempts yet. Start playing!</div>'; return; }
-  const names = ['','Fundamentals','Data Models','Foundation Objects','Rules & Workflows','Advanced'];
-  list.innerHTML = history.slice(0, 10).map(h => `
-    <div class="history-item">
-      <span class="h-level">Lvl ${h.level} · ${names[h.level]}</span>
-      <span class="h-score ${h.score >= 8 ? 'pass' : 'fail'}">${h.score}/10 ${h.score >= 8 ? '✅' : '❌'}</span>
-      <span class="h-date">${h.date}</span>
-    </div>`).join('');
+  var names = ['','Fundamentals','Data Models','Foundation Objects','Rules & Workflows','Advanced'];
+  var html = '';
+  var max = Math.min(history.length, 10);
+  for (var i = 0; i < max; i++) {
+    var h = history[i];
+    html += '<div class="history-item"><span class="h-level">Lvl ' + h.level + ' \u00B7 ' + names[h.level] + '</span><span class="h-score ' + (h.score >= 8 ? 'pass' : 'fail') + '">' + h.score + '/10 ' + (h.score >= 8 ? '\u2705' : '\u274C') + '</span><span class="h-date">' + h.date + '</span></div>';
+  }
+  list.innerHTML = html;
 }
 
 function renderStats() {
-  const total = history.length;
-  const passed = history.filter(h => h.score >= 8).length;
-  const best = total > 0 ? Math.max(...history.map(h => h.score)) * 10 : 0;
+  var total = history.length;
+  var passed = 0;
+  var best = 0;
+  for (var i = 0; i < history.length; i++) {
+    if (history[i].score >= 8) passed++;
+    if (history[i].score > best) best = history[i].score;
+  }
   document.getElementById('statAttempts').textContent = total;
   document.getElementById('statPassed').textContent = passed;
-  document.getElementById('statBest').textContent = best + '%';
+  document.getElementById('statBest').textContent = (total > 0 ? best * 10 : 0) + '%';
 }
 
 function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = arr[i]; arr[i] = arr[j]; arr[j] = temp;
   }
   return arr;
 }
 
 function startQuiz() {
-  const pool = [...allQuestions[currentLevel]];
+  var pool = allQuestions[currentLevel].slice();
   currentQuestions = shuffle(pool).slice(0, 10);
   currentIndex = 0; score = 0; answered = false;
   document.getElementById('levelBadge').textContent = 'Level ' + currentLevel;
@@ -505,43 +475,45 @@ function startQuiz() {
 }
 
 function renderQuestion() {
-  const q = currentQuestions[currentIndex];
-  document.getElementById('questionCounter').textContent = `Question ${currentIndex + 1} of 10`;
-  document.getElementById('scoreDisplay').textContent = `Score: ${score}/${currentIndex}`;
+  var q = currentQuestions[currentIndex];
+  document.getElementById('questionCounter').textContent = 'Question ' + (currentIndex + 1) + ' of 10';
+  document.getElementById('scoreDisplay').textContent = 'Score: ' + score + '/' + currentIndex;
   document.getElementById('progressFill').style.width = ((currentIndex) / 10 * 100) + '%';
   document.getElementById('questionText').textContent = q.q;
   document.getElementById('explanation').style.display = 'none';
   document.getElementById('nextBtn').style.display = 'none';
   answered = false;
-  const letters = ['A','B','C','D'];
-  const oc = document.getElementById('optionsContainer');
+  var letters = ['A','B','C','D'];
+  var oc = document.getElementById('optionsContainer');
   oc.innerHTML = '';
-  q.o.forEach((opt, i) => {
-    const btn = document.createElement('button');
+  for (var i = 0; i < q.o.length; i++) {
+    var btn = document.createElement('button');
     btn.className = 'option-btn';
-    btn.innerHTML = `<span class="letter">${letters[i]}</span><span>${opt}</span>`;
-    btn.onclick = () => selectAnswer(i);
+    btn.innerHTML = '<span class="letter">' + letters[i] + '</span><span>' + q.o[i] + '</span>';
+    (function(idx) {
+      btn.onclick = function() { selectAnswer(idx); };
+    })(i);
     oc.appendChild(btn);
-  });
+  }
 }
 
 function selectAnswer(selected) {
   if (answered) return;
   answered = true;
-  const q = currentQuestions[currentIndex];
-  const btns = document.querySelectorAll('.option-btn');
-  btns.forEach((btn, i) => {
-    btn.classList.add('disabled');
-    if (i === q.a) btn.classList.add('correct');
-    if (i === selected && selected !== q.a) btn.classList.add('wrong');
-  });
+  var q = currentQuestions[currentIndex];
+  var btns = document.querySelectorAll('.option-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.add('disabled');
+    if (i === q.a) btns[i].classList.add('correct');
+    if (i === selected && selected !== q.a) btns[i].classList.add('wrong');
+  }
   if (selected === q.a) score++;
-  const exp = document.getElementById('explanation');
-  exp.textContent = (selected === q.a ? '✅ Correct! ' : '❌ Incorrect. ') + q.e;
+  var exp = document.getElementById('explanation');
+  exp.textContent = (selected === q.a ? '\u2705 Correct! ' : '\u274C Incorrect. ') + q.e;
   exp.className = 'explanation' + (selected !== q.a ? ' wrong-exp' : '');
   exp.style.display = 'block';
   document.getElementById('nextBtn').style.display = 'block';
-  document.getElementById('nextBtn').textContent = currentIndex === 9 ? '🏁 See Results' : 'Next →';
+  document.getElementById('nextBtn').textContent = currentIndex === 9 ? '\uD83C\uDFC1 See Results' : 'Next \u2192';
 }
 
 function nextQuestion() {
@@ -550,16 +522,16 @@ function nextQuestion() {
   renderQuestion();
 }
 
-async function showResults() {
-  const passed = score >= 8;
-  document.getElementById('resultIcon').textContent = passed ? '🏆' : '😔';
+function showResults() {
+  var passed = score >= 8;
+  document.getElementById('resultIcon').textContent = passed ? '\uD83C\uDFC6' : '\uD83D\uDE14';
   document.getElementById('resultTitle').textContent = passed ? 'LEVEL PASSED!' : 'NOT YET...';
-  const rs = document.getElementById('resultScore');
+  var rs = document.getElementById('resultScore');
   rs.textContent = score + ' / 10';
   rs.className = 'result-score ' + (passed ? 'pass' : 'fail');
   document.getElementById('resultMsg').textContent = passed
-    ? (currentLevel < 5 ? `Amazing! Level ${currentLevel + 1} unlocked! 🎉` : 'You completed ALL levels! SAP EC Master! 🎓')
-    : `You need 8/10 to pass. You got ${score}. Keep studying! 💪`;
+    ? (currentLevel < 5 ? 'Amazing! Level ' + (currentLevel + 1) + ' unlocked!' : 'You completed ALL levels! SAP EC Master!')
+    : 'You need 8/10 to pass. You got ' + score + '. Keep studying!';
 
   if (passed && currentLevel < 5) {
     maxUnlocked = Math.max(maxUnlocked, currentLevel + 1);
@@ -571,7 +543,7 @@ async function showResults() {
     date: new Date().toLocaleDateString()
   });
 
-  await saveUserData();
+  saveUserData();
   showScreen('resultScreen');
 }
 
